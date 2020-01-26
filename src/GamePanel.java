@@ -63,13 +63,14 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	void drawGameState(Graphics g){
 		player.draw(g);
 	}
+	
 	void drawEndState(Graphics g) {
 		g.setColor(Color.RED);
 		g.fillRect(0, 0, MW3.WIDTH, MW3.HEIGHT);
 		
 		g.setFont(titleFont);
 		g.setColor(Color.white);
-		g.drawString("GAME OVER",350,150);
+		g.drawString("GAME OVER",250,150);
 		
 		g.setFont(titleFont);
 		g.setColor(Color.white);
@@ -105,20 +106,39 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		    }
 		}
 		if (e.getKeyCode()==KeyEvent.VK_UP) {
-		    System.out.println("UP");
+		    System.out.println("JUMP");
+		    if(player.y>=MW3.WIDTH/2) {
+		    player.jump();
+		    }
 		}
 		if (e.getKeyCode()==KeyEvent.VK_DOWN) {
-		    System.out.println("DOWN");
+		    System.out.println("CROUCH");
+		    if(player.y<MW3.HEIGHT-player.height) {
+				//System.out.println("DOWN");
+		    	
+			}
+		    
 		}if (e.getKeyCode()==KeyEvent.VK_RIGHT) {
 		    System.out.println("RIGHT");
+		    if(player.x<=MW3.WIDTH-(player.width)-player.speed) {
+				//System.out.println("RIGHT");
+				player.right();
+			}
 		}if (e.getKeyCode()==KeyEvent.VK_LEFT) {
 		    System.out.println("LEFT");
+		    if(player.x>=player.speed) {
+				player.left();
+			}
 		}
 	}
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+		if (e.getKeyCode()==KeyEvent.VK_UP) {
+		    System.out.println("JUMP");
+		    player.fall();
+		    
+		}
 	}
 	
 }
