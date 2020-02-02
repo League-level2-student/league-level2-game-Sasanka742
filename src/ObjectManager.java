@@ -1,7 +1,10 @@
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class ObjectManager {
+public class ObjectManager implements ActionListener{
 	soldier player;
 	ArrayList<bullet> bullets = new ArrayList<bullet>(); 
 	ArrayList<enemy> enemies = new ArrayList<enemy>();
@@ -13,8 +16,8 @@ public class ObjectManager {
 	void addBullet(bullet b){
 		bullets.add(b);
 	}
-	void addEnemy(enemy e) {
-		enemies.add(new enemy(400,MW3.HEIGHT-100,50,50));
+	void addEnemy() {
+		enemies.add(new enemy((random.nextInt(MW3.HEIGHT-400+1)+400),MW3.WIDTH,50,50));
 	}
 	
 	void update(){
@@ -32,6 +35,34 @@ public class ObjectManager {
 				bullet.isActive = false;
 			}
 		}
+	}
+	void draw(Graphics g) {
+		player.draw(g);
+		for(enemy enemy: enemies) {
+			enemy.draw(g);
+		}
+		for(bullet bullet: bullets) {
+			bullet.draw(g);
+		}
+		
+	}
+	void purgeObjects() {
+		for(int i=0;i<bullets.size();i++) {
+			if(bullets.get(i).isActive==false) {
+				bullets.remove(i);
+			}
+		}
+		for(int i=0;i<enemies.size();i++) {
+			if(enemies.get(i).isActive==false) {
+				enemies.remove(i);
+			}
+		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		addEnemy();
 	}
 }
 

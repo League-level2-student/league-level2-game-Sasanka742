@@ -5,12 +5,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
 public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
+	public static BufferedImage image;
+	public static boolean needImage = true;
+	public static boolean gotImage = false;
+	
     final int MENU = 0;
     final int GAME = 1;
     final int END = 2;
@@ -19,13 +25,19 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	
 	Font titleFont;
 	Timer frameDraw;
+	Timer enemySpawn;
 	
-	soldier player = new soldier(100,400,50,50);
+	soldier player = new soldier(100,300,50,50);
+	
+	ObjectManager manager = new ObjectManager(player);
 	
 	public GamePanel() {
 		titleFont = new Font("Arial", Font.PLAIN, 48);
 		frameDraw = new Timer(1000/60, this);
 		frameDraw.start();
+		if (needImage) {
+		    loadImage ("map.png");
+		}
 	}
 	@Override
 	public void paintComponent(Graphics g){
@@ -37,12 +49,15 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		    drawEndState(g);
 		}
 	}
-	
+	void startGame() {
+		enemySpawn = new Timer(1000 , manager);
+	    enemySpawn.start();
+	}
 	void updateMenuState() {
 		
 	}
 	void updateGameState() {
-		
+		manager.update();
 	}
 	void updateEndState() {
 		
@@ -61,7 +76,13 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.drawString("Press Enter to Start",200,250);
 	}
 	void drawGameState(Graphics g){
-		player.draw(g);
+		if (gotImage) {
+			g.drawImage(image, 0, 0, MW3.WIDTH, MW3.HEIGHT, null);
+		}else {
+			g.setColor(Color.BLUE);
+			g.fillRect(0, 0, WIDTH, HEIGHT);
+		}
+		manager.draw(g);
 	}
 	
 	void drawEndState(Graphics g) {
@@ -103,13 +124,12 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		        currentState = MENU;
 		    } else {
 		        currentState++;
+		        startGame();
 		    }
 		}
 		if (e.getKeyCode()==KeyEvent.VK_UP) {
-		    System.out.println("JUMP");
-		    if(player.y>=MW3.WIDTH/2) {
-		    player.jump();
-		    }
+		    System.out.println("JUMP"); 
+		   player.jump();
 		}
 		if (e.getKeyCode()==KeyEvent.VK_DOWN) {
 		    System.out.println("CROUCH");
@@ -139,6 +159,17 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		    player.fall();
 		    
 		}
+	}
+	void loadImage(String imageFile) {
+	    if (needImage) {
+	        try {
+	            image = ImageIO.read(this.getClass().getResourceAsStream(imageFile));
+		    gotImage = true;
+	        } catch (Exception e) {
+	            
+	        }
+	        needImage = false;
+	    }
 	}
 	
 }

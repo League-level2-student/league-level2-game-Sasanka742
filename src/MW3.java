@@ -3,7 +3,7 @@ import javax.swing.JFrame;
 public class MW3 {
 	JFrame frame;
 	
-	public static final int WIDTH = 800;
+	public static final int WIDTH = 1485;
 	public static final int HEIGHT = 500;
 	
 	GamePanel panel;
