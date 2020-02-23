@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
 public class enemy extends GameObject {
-	
+	int step;
 	public static BufferedImage image;
 	public static boolean needImage = true;
 	public static boolean gotImage = false;	
@@ -15,11 +15,12 @@ public class enemy extends GameObject {
 		// TODO Auto-generated constructor stub
 		speed = 1;
 		if (needImage) {
-		    loadImage ("rocket.png");
+		    loadImage ("enemy1.png");
 		}
 	}
 	
 	void draw(Graphics g) {
+		
 		if (gotImage) {
 			g.drawImage(image, x, y, width, height, null);
 		} else {
@@ -29,6 +30,7 @@ public class enemy extends GameObject {
 	}
 	void update() {
 		x-=speed;
+		super.update();
 	}
 	
 	void loadImage(String imageFile) {

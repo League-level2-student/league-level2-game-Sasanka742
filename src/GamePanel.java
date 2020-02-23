@@ -24,6 +24,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	int currentState = MENU;
 	
 	Font titleFont;
+	
 	Timer frameDraw;
 	Timer enemySpawn;
 	
@@ -33,7 +34,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	
 	public GamePanel() {
 		titleFont = new Font("Arial", Font.PLAIN, 48);
-		frameDraw = new Timer(1000/60, this);
+		frameDraw = new Timer(1000/120, this);
 		frameDraw.start();
 		if (needImage) {
 		    loadImage ("map.png");
@@ -58,6 +59,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	}
 	void updateGameState() {
 		manager.update();
+		if(player.isActive==false) {
+			currentState = END;
+		}
 	}
 	void updateEndState() {
 		
@@ -148,6 +152,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		    System.out.println("LEFT");
 		    if(player.x>=player.speed) {
 				player.left();
+			}
+		}if (e.getKeyCode()==KeyEvent.VK_SPACE) {
+			System.out.println("Fire!!");
+			if(currentState==GAME) {
+				manager.addBullet(player.getProjectile());
 			}
 		}
 	}

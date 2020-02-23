@@ -21,7 +21,7 @@ public class bullet extends GameObject {
 	}
 	void draw(Graphics g) {
 		if (gotImage) {
-			g.drawImage(image, x, y, width, height, null);
+			g.drawImage(image, x, y+55, width, height, null);
 		} else {
 			g.setColor(Color.BLUE);
 			g.fillRect(x, y, width, height);
@@ -29,6 +29,7 @@ public class bullet extends GameObject {
 	}
 	void update() {
 		x+=speed;
+		super.update();
 	}
 	
 	void loadImage(String imageFile) {

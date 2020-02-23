@@ -9,6 +9,7 @@ public class ObjectManager implements ActionListener{
 	ArrayList<bullet> bullets = new ArrayList<bullet>(); 
 	ArrayList<enemy> enemies = new ArrayList<enemy>();
 	Random random = new Random();
+	
 	public ObjectManager(soldier soldier) {
 		player = soldier;
 	}
@@ -17,13 +18,14 @@ public class ObjectManager implements ActionListener{
 		bullets.add(b);
 	}
 	void addEnemy() {
-		enemies.add(new enemy((random.nextInt(MW3.HEIGHT-400+1)+400),MW3.WIDTH,50,50));
+		enemies.add(new enemy(MW3.WIDTH+100,(random.nextInt(MW3.HEIGHT-450+1)+310),50,50));
 	}
 	
 	void update(){
 		for(enemy enemy: enemies) {
 			enemy.update();
 			if(enemy.x<0) {
+				
 				enemy.isActive = false;
 				player.isActive = false;
 			}

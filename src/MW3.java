@@ -22,5 +22,6 @@ public class MW3 {
 		frame.setVisible(true);
 		frame.setSize(WIDTH,HEIGHT);
 		frame.addKeyListener(panel);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 }
