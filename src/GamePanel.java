@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -20,7 +21,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     final int MENU = 0;
     final int GAME = 1;
     final int END = 2;
-	
+	Random random = new Random();
 	int currentState = MENU;
 	
 	Font titleFont;
@@ -68,20 +69,25 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	}
 	////////////
 	void drawMenuState(Graphics g) {
+		if (gotImage) {
+			g.drawImage(image, 0, 0, MW3.WIDTH, MW3.HEIGHT, null);
+		}else {
 		g.setColor(Color.BLUE);
 		g.fillRect(0, 0, MW3.WIDTH, MW3.HEIGHT);
+		}
+		g.setFont(titleFont);
+		g.setColor(Color.white);
+		g.drawString("Ghost Warfare 3",550,150);
 		
 		g.setFont(titleFont);
 		g.setColor(Color.white);
-		g.drawString("MW3",350,150);
-		
-		g.setFont(titleFont);
-		g.setColor(Color.white);
-		g.drawString("Press Enter to Start",200,250);
+		g.drawString("Press Enter to Start",500,250);
 	}
 	void drawGameState(Graphics g){
 		if (gotImage) {
 			g.drawImage(image, 0, 0, MW3.WIDTH, MW3.HEIGHT, null);
+			g.setColor(Color.WHITE);
+			g.drawString("Score: "+ manager.getScore(), 10, 15);
 		}else {
 			g.setColor(Color.BLUE);
 			g.fillRect(0, 0, WIDTH, HEIGHT);
@@ -90,16 +96,20 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	}
 	
 	void drawEndState(Graphics g) {
+		if (gotImage) {
+			g.drawImage(image, 0, 0, MW3.WIDTH, MW3.HEIGHT, null);
+		}else {
 		g.setColor(Color.RED);
 		g.fillRect(0, 0, MW3.WIDTH, MW3.HEIGHT);
+		}
 		
 		g.setFont(titleFont);
 		g.setColor(Color.white);
-		g.drawString("GAME OVER",250,150);
+		g.drawString("GAME OVER",550,150);
 		
 		g.setFont(titleFont);
 		g.setColor(Color.white);
-		g.drawString("Press Enter to Start",200,250);
+		g.drawString("Press Enter to Start",500,250);
 	}
 	////////////
 	@Override
@@ -133,25 +143,27 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		}
 		if (e.getKeyCode()==KeyEvent.VK_UP) {
 		    System.out.println("JUMP"); 
-		   player.jump();
+		    if(player.y>MW3.HEIGHT-450){
+		    	player.up = true;
+		    }
 		}
 		if (e.getKeyCode()==KeyEvent.VK_DOWN) {
 		    System.out.println("CROUCH");
 		    if(player.y<MW3.HEIGHT-player.height) {
 				//System.out.println("DOWN");
-		    	
+		    	player.fall = true;
 			}
 		    
 		}if (e.getKeyCode()==KeyEvent.VK_RIGHT) {
 		    System.out.println("RIGHT");
 		    if(player.x<=MW3.WIDTH-(player.width)-player.speed) {
 				//System.out.println("RIGHT");
-				player.right();
+				player.right = true;
 			}
 		}if (e.getKeyCode()==KeyEvent.VK_LEFT) {
 		    System.out.println("LEFT");
 		    if(player.x>=player.speed) {
-				player.left();
+				player.left = true;
 			}
 		}if (e.getKeyCode()==KeyEvent.VK_SPACE) {
 			System.out.println("Fire!!");
@@ -165,8 +177,19 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		// TODO Auto-generated method stub
 		if (e.getKeyCode()==KeyEvent.VK_UP) {
 		    System.out.println("JUMP");
-		    player.fall();
-		    
+		   // player.fall();
+		    player.up = false;
+		}
+		if(e.getKeyCode()==KeyEvent.VK_LEFT) {
+			player.left=false;
+		}
+		if(e.getKeyCode()==KeyEvent.VK_RIGHT) {
+			player.right=false;
+		}
+		if (e.getKeyCode()==KeyEvent.VK_DOWN) {
+		    System.out.println("JUMP");
+		   // player.fall();
+		    player.fall = false;
 		}
 	}
 	void loadImage(String imageFile) {

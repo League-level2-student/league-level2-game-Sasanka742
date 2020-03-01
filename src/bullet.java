@@ -20,6 +20,7 @@ public class bullet extends GameObject {
 		}
 	}
 	void draw(Graphics g) {
+		
 		if (gotImage) {
 			g.drawImage(image, x, y+55, width, height, null);
 		} else {
@@ -30,6 +31,7 @@ public class bullet extends GameObject {
 	void update() {
 		x+=speed;
 		super.update();
+		collisionBox.setBounds(x, y+55, width, height);
 	}
 	
 	void loadImage(String imageFile) {

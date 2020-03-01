@@ -10,10 +10,15 @@ public class soldier extends GameObject{
 	public static boolean needImage = true;
 	public static boolean gotImage = false;	
 	
+	boolean right = false;
+	boolean left = false;
+	boolean up = false;
+	boolean fall = false;
+	
 	public soldier(int xVal, int yVal, int Width, int Height) {
 		super(xVal, yVal, Width, Height);
 		// TODO Auto-generated constructor stub
-		 speed = 10;
+		 speed = 1;
 		 if (needImage) {
 			    loadImage ("Gunner.png");
 		}
@@ -34,15 +39,30 @@ public class soldier extends GameObject{
 		x-=speed;
 	}
 	void jump() {
-		y-=speed +2*(4.8)*(speed) ;
+		y-=speed;
 		
 	}
 	void fall() {
-		y+=speed +2*(4.8)*(speed) ;
+		y+=speed;
 	}
 	void crouch(Graphics g) {
 		 g.setColor(Color.RED);
 	     g.fillRect(x, y, width, height);
+	}
+	void update() {
+		super.update();
+		if(left==true) {
+			left();
+		}
+		if(right==true) {
+			right();
+		}
+		if(up==true) {
+			jump();
+		}
+		if(fall==true) {
+			fall();
+		}
 	}
 	
 	public bullet getProjectile() {

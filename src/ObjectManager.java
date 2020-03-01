@@ -9,13 +9,14 @@ public class ObjectManager implements ActionListener{
 	ArrayList<bullet> bullets = new ArrayList<bullet>(); 
 	ArrayList<enemy> enemies = new ArrayList<enemy>();
 	Random random = new Random();
-	
+	int kills=0;
 	public ObjectManager(soldier soldier) {
 		player = soldier;
 	}
 	
 	void addBullet(bullet b){
 		bullets.add(b);
+		
 	}
 	void addEnemy() {
 		enemies.add(new enemy(MW3.WIDTH+100,(random.nextInt(MW3.HEIGHT-450+1)+310),50,50));
@@ -37,6 +38,11 @@ public class ObjectManager implements ActionListener{
 				bullet.isActive = false;
 			}
 		}
+		player.update();
+		if(player.isActive==true) {
+			checkCollision();
+			purgeObjects();
+		}
 	}
 	void draw(Graphics g) {
 		player.draw(g);
@@ -47,6 +53,26 @@ public class ObjectManager implements ActionListener{
 			bullet.draw(g);
 		}
 		
+	}
+	int getScore() {
+		return kills;
+	}
+	void checkCollision() {
+		for(int i=0;i<enemies.size();i++) {
+			if(player.collisionBox.intersects(enemies.get(i).collisionBox)) {
+				player.isActive = false;
+				enemies.get(i).isActive = false;
+			}
+		}
+		for(int i=0;i<enemies.size();i++) {
+			for(int k=0;k<bullets.size();k++) {
+				if(bullets.get(k).collisionBox.intersects(enemies.get(i).collisionBox)) {
+					enemies.get(i).isActive = false;
+					bullets.get(k).isActive = false;
+					kills++;
+				}
+			}
+		}
 	}
 	void purgeObjects() {
 		for(int i=0;i<bullets.size();i++) {
