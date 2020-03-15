@@ -143,7 +143,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		}
 		if (e.getKeyCode()==KeyEvent.VK_UP) {
 		    System.out.println("JUMP"); 
-		    if(player.y>MW3.HEIGHT-450){
+		    if(player.y>MW3.HEIGHT-450&&(player.y>1500&&player.y<200)){
 		    	player.up = true;
 		    }
 		}
