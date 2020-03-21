@@ -57,6 +57,9 @@ public class ObjectManager implements ActionListener{
 	int getScore() {
 		return kills;
 	}
+	void setScore(int score) {
+		kills=score;
+	}
 	void checkCollision() {
 		for(int i=0;i<enemies.size();i++) {
 			if(player.collisionBox.intersects(enemies.get(i).collisionBox)) {
