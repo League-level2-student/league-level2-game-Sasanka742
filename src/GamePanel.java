@@ -14,7 +14,7 @@ import javax.swing.Timer;
 
 public class GamePanel extends JPanel implements ActionListener, KeyListener {
 int savedScore=0;
-int spawnRate = 1000;
+int spawnRate=1000;
 int waveNum = 1;
 int number = 1;
 	public static BufferedImage image;
@@ -23,7 +23,8 @@ int number = 1;
 	
     final int MENU = 0;
     final int GAME = 1;
-    final int END = 2;
+    final int WAVE = 2;
+    final int END = 3;
 	Random random = new Random();
 	int currentState = MENU;
 	
@@ -53,9 +54,15 @@ int number = 1;
 		    drawGameState(g);
 		}else if(currentState == END){
 		    drawEndState(g);
+		}else if(currentState == WAVE){
+			drawWaveState(g);
 		}
 	}
 	void startGame() {
+		if(manager.getScore()/20==number&&manager.getScore()!=0) {
+			spawnRate = spawnRate-100;
+		}
+		manager.changeEnemySpeed();
 		enemySpawn = new Timer(spawnRate , manager);
 	    enemySpawn.start();
 	}
@@ -63,18 +70,28 @@ int number = 1;
 		
 	}
 	void updateGameState() {
+		
 		manager.update();
 		if(player.isActive==false) {
 			currentState = END;
 		}
 		if(manager.getScore()/20==number&&manager.getScore()!=0) {
 			spawnRate = spawnRate-100;
-			number++;
 			waveNum++;
-			currentState = END;
+			currentState = WAVE;
 		}
+		
+			if(manager.getScore()>200&&manager.getScore()<40000) {
+				System.out.println("SYSTEM OVERLOAD!!!");
+			}
+			if(manager.getScore()>50000) {
+				System.out.println("SYSTEM ENTERING GOD MODE");
+			}
 	}
 	void updateEndState() {
+		
+	}
+	void updateWaveState() {
 		
 	}
 	////////////
@@ -114,7 +131,7 @@ int number = 1;
 		g.fillRect(0, 0, MW3.WIDTH, MW3.HEIGHT);
 		}
 		
-		if(player.isActive == true) {
+		if(player.isActive == false) {
 			g.setFont(titleFont);
 			g.setColor(Color.white);
 			g.drawString("Wave " + waveNum,550,150);
@@ -132,6 +149,17 @@ int number = 1;
 		g.drawString("Press Enter to Start",500,250);
 		}
 	}
+	void drawWaveState(Graphics g) {
+		if(player.isActive == true) {
+			g.setFont(titleFont);
+			g.setColor(Color.white);
+			g.drawString("Wave " + waveNum,550,150);
+			
+			g.setFont(titleFont);
+			g.setColor(Color.white);
+			g.drawString("Press Enter for next Wave",350,250);
+		}
+	}
 	////////////
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -143,6 +171,8 @@ int number = 1;
 		    updateGameState();
 		}else if(currentState == END){
 		    updateEndState();
+		}else if(currentState == WAVE){
+		    updateWaveState();
 		}
 		repaint();
 	}
@@ -155,20 +185,23 @@ int number = 1;
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
 		if (e.getKeyCode()==KeyEvent.VK_ENTER) {
-		    if (currentState == END&&manager.getScore()==0) {
+		    if (currentState == END) {
 		    	player = new soldier(100,300,50,50);
 				manager = new ObjectManager(player);
 		        currentState = MENU;
 		        manager.setScore(0);
-		    } else if(currentState==END&&manager.getScore()>0) {
+		    } else if(currentState==WAVE&&waveNum>1&&manager.getScore()/20==number) {
 		    	player = new soldier(100,300,50,50);
 		    	savedScore= manager.getScore();
 		    	manager = new ObjectManager(player);
-				startGame();
+				number++;
 				manager.setScore(savedScore);
+				manager.changeEnemySpeed();
+				currentState = GAME;
+				startGame();
 		    }else {
-		        currentState++;
-		        startGame();
+		    	 currentState++;
+			        startGame();
 		    }
 		}
 		if (e.getKeyCode()==KeyEvent.VK_UP) {

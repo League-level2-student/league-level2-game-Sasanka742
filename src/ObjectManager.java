@@ -9,17 +9,23 @@ public class ObjectManager implements ActionListener{
 	ArrayList<bullet> bullets = new ArrayList<bullet>(); 
 	ArrayList<enemy> enemies = new ArrayList<enemy>();
 	Random random = new Random();
-	int kills=0;
+	int kills;
+	int speedValue;
 	public ObjectManager(soldier soldier) {
 		player = soldier;
 	}
-	
+	void changeEnemySpeed() {
+		speedValue++;
+	}
+	int getEnemySpeed() {
+			return enemies.get(0).getSpeed();
+	}
 	void addBullet(bullet b){
 		bullets.add(b);
 		
 	}
 	void addEnemy() {
-		enemies.add(new enemy(MW3.WIDTH+100,(random.nextInt(MW3.HEIGHT-450+1)+310),50,50));
+		enemies.add(new enemy(MW3.WIDTH+100,(random.nextInt(MW3.HEIGHT-450+1)+310),50,50,speedValue));
 	}
 	
 	void update(){

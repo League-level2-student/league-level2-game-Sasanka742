@@ -10,10 +10,10 @@ public class enemy extends GameObject {
 	public static boolean needImage = true;
 	public static boolean gotImage = false;	
 	
-	public enemy(int xVal, int yVal, int Width, int Height) {
+	public enemy(int xVal, int yVal, int Width, int Height, int setSpeed) {
 		super(xVal, yVal, Width, Height);
 		// TODO Auto-generated constructor stub
-		speed = 1;
+		speed = setSpeed;
 		if (needImage) {
 		    loadImage ("enemy1.png");
 		}
@@ -27,6 +27,12 @@ public class enemy extends GameObject {
 			g.setColor(Color.BLUE);
 			g.fillRect(x, y, width, height);
 		}
+	}
+	int getSpeed() {
+		return speed;
+	}
+	void setSpeed(int speed) {
+		this.speed = speed;
 	}
 	void update() {
 		x-=speed;
