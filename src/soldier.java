@@ -1,10 +1,11 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
-public class soldier extends GameObject{
+public class soldier extends GameObject  {
 
 	public static BufferedImage image;
 	public static boolean needImage = true;
@@ -14,14 +15,16 @@ public class soldier extends GameObject{
 	boolean left = false;
 	boolean up = false;
 	boolean fall = false;
-	
-	public soldier(int xVal, int yVal, int Width, int Height) {
+	String imageName;
+	public soldier(int xVal, int yVal, int Width, int Height, String name) {
 		super(xVal, yVal, Width, Height);
-		// TODO Auto-generated constructor stub
+		// TODO Auto-generated constructor stub 
 		 speed = 1;
-		 if (needImage) {
-			    loadImage ("Gunner.png");
-		}
+		loadImage (name);
+		imageName = name;
+	}
+	String getStringName() {
+		return imageName;
 	}
 	
 	void draw(Graphics g) {
@@ -45,10 +48,6 @@ public class soldier extends GameObject{
 	void fall() {
 		y+=speed;
 	}
-	void crouch(Graphics g) {
-		 g.setColor(Color.RED);
-	     g.fillRect(x, y, width, height);
-	}
 	void update() {
 		super.update();
 		if(left==true) {
@@ -70,7 +69,7 @@ public class soldier extends GameObject{
 	}
 	
 	void loadImage(String imageFile) {
-	    if (needImage) {
+	   
 	        try {
 	            image = ImageIO.read(this.getClass().getResourceAsStream(imageFile));
 		    gotImage = true;
@@ -78,6 +77,5 @@ public class soldier extends GameObject{
 	            
 	        }
 	        needImage = false;
-	    }
 	}
 }

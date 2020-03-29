@@ -1,6 +1,8 @@
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -14,6 +16,9 @@ public class ObjectManager implements ActionListener{
 	public ObjectManager(soldier soldier) {
 		player = soldier;
 	}
+	void setPlayer(soldier soldier) {
+		player = soldier;
+	}
 	void changeEnemySpeed() {
 		speedValue++;
 	}
@@ -25,7 +30,7 @@ public class ObjectManager implements ActionListener{
 		
 	}
 	void addEnemy() {
-		enemies.add(new enemy(MW3.WIDTH+100,(random.nextInt(MW3.HEIGHT-450+1)+310),50,50,speedValue));
+		enemies.add(new enemy(MW3.WIDTH+100,(random.nextInt(MW3.HEIGHT-450+1)+310),50,50,3));
 	}
 	
 	void update(){
@@ -68,7 +73,7 @@ public class ObjectManager implements ActionListener{
 	}
 	void checkCollision() {
 		for(int i=0;i<enemies.size();i++) {
-			if(player.collisionBox.intersects(enemies.get(i).collisionBox)) {
+			if(player.collisionBox.intersects(enemies.get(i).collisionBox)&&(player.getStringName().equals("defend.png")==false)) {
 				player.isActive = false;
 				enemies.get(i).isActive = false;
 			}

@@ -33,14 +33,14 @@ int number = 1;
 	Timer frameDraw;
 	Timer enemySpawn;
 	
-	soldier player = new soldier(100,300,50,50);
+	soldier player = new soldier(100,300,50,50,"Gunner.png");
 	
 	ObjectManager manager;
 	
 	public GamePanel() {
 		manager = new ObjectManager(player);
 		titleFont = new Font("Arial", Font.PLAIN, 48);
-		frameDraw = new Timer(1000/120, this);
+		frameDraw = new Timer(1000/60, this);
 		frameDraw.start();
 		if (needImage) {
 		    loadImage ("map.png");
@@ -83,6 +83,9 @@ int number = 1;
 		
 			if(manager.getScore()>200&&manager.getScore()<40000) {
 				System.out.println("SYSTEM OVERLOAD!!!");
+				if(currentState==GAME) {
+					manager.addBullet(player.getProjectile());
+				}
 			}
 			if(manager.getScore()>50000) {
 				System.out.println("SYSTEM ENTERING GOD MODE");
@@ -134,20 +137,13 @@ int number = 1;
 		if(player.isActive == false) {
 			g.setFont(titleFont);
 			g.setColor(Color.white);
-			g.drawString("Wave " + waveNum,550,150);
+			g.drawString("GAME OVER",550,150);
 			
 			g.setFont(titleFont);
 			g.setColor(Color.white);
-			g.drawString("Press Enter for next Wave",500,250);
-		}else {
-		g.setFont(titleFont);
-		g.setColor(Color.white);
-		g.drawString("GAME OVER",550,150);
-		
-		g.setFont(titleFont);
-		g.setColor(Color.white);
-		g.drawString("Press Enter to Start",500,250);
+			g.drawString("Press Enter to Start",500,250);
 		}
+		manager.draw(g);
 	}
 	void drawWaveState(Graphics g) {
 		if(player.isActive == true) {
@@ -157,8 +153,9 @@ int number = 1;
 			
 			g.setFont(titleFont);
 			g.setColor(Color.white);
-			g.drawString("Press Enter for next Wave",350,250);
+			g.drawString("Press Enter for next Wave",325,250);
 		}
+
 	}
 	////////////
 	@Override
@@ -184,14 +181,29 @@ int number = 1;
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
+		
+		if (e.getKeyCode()==KeyEvent.VK_Z) {
+			if(player.getStringName().equals("Gunner.png")) {
+				player = new soldier(player.x,player.y,50,50, "defend.png");
+				manager.setPlayer(player);
+			}else {
+				player = new soldier(player.x,player.y,50,50, "Gunner.png");
+				manager.setPlayer(player);
+				startGame();
+			}
+		}
 		if (e.getKeyCode()==KeyEvent.VK_ENTER) {
 		    if (currentState == END) {
-		    	player = new soldier(100,300,50,50);
+		    	player = new soldier(100,300,50,50, "Gunner.png");
 				manager = new ObjectManager(player);
-		        currentState = MENU;
 		        manager.setScore(0);
+		        waveNum = 1;
+		        number = 1;
+		        currentState = GAME;
+		        startGame();
+		        
 		    } else if(currentState==WAVE&&waveNum>1&&manager.getScore()/20==number) {
-		    	player = new soldier(100,300,50,50);
+		    	player = new soldier(100,300,50,50,"Gunner.png");
 		    	savedScore= manager.getScore();
 		    	manager = new ObjectManager(player);
 				number++;
