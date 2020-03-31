@@ -29,7 +29,7 @@ public class soldier extends GameObject  {
 	
 	void draw(Graphics g) {
 		if (gotImage) {
-			g.drawImage(image, x,y, 70, 100, null);
+			g.drawImage(image, x,y, 60, 60, null);
 		} else {
 			g.setColor(Color.BLUE);
 			g.fillRect(x, y, width, height);
@@ -65,7 +65,7 @@ public class soldier extends GameObject  {
 	}
 	
 	public bullet getProjectile() {
-        return new bullet(x+width/2, y, 10, 10);
+        return new bullet((x+width/2)+10, y-24, 10, 10);
 	}
 	
 	void loadImage(String imageFile) {

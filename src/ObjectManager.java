@@ -65,6 +65,9 @@ public class ObjectManager implements ActionListener{
 		}
 		
 	}
+	void drawDead() {
+		player = new soldier(player.x,player.y,50,50, "dead.png");
+	}
 	int getScore() {
 		return kills;
 	}

@@ -135,6 +135,7 @@ int number = 1;
 		}
 		
 		if(player.isActive == false) {
+			manager.drawDead();
 			g.setFont(titleFont);
 			g.setColor(Color.white);
 			g.drawString("GAME OVER",550,150);
@@ -218,7 +219,7 @@ int number = 1;
 		}
 		if (e.getKeyCode()==KeyEvent.VK_UP) {
 		    System.out.println("JUMP"); 
-		    if(player.y>MW3.HEIGHT-450){
+		    if(player.y>250-player.height) {
 		    	player.up = true;
 		    }
 		}
@@ -238,12 +239,17 @@ int number = 1;
 		if (e.getKeyCode()==KeyEvent.VK_RIGHT) {
 		    System.out.println("RIGHT");
 		    if(player.x<=MW3.WIDTH-(player.width)-player.speed) {
-				//System.out.println("RIGHT");
-				player.right = true;
-			}
+				//System.out.println("RIGHT");		    	
+				player = new soldier(player.x,player.y,50,50, "walk.png");
+				manager.setPlayer(player);
+		    	player.right = true;
+			} 
+		   
 		}if (e.getKeyCode()==KeyEvent.VK_LEFT) {
 		    System.out.println("LEFT");
 		    if(player.x>=player.speed) {
+				player = new soldier(player.x,player.y,50,50, "walk.png");
+				manager.setPlayer(player);
 				player.left = true;
 			}
 		}if (e.getKeyCode()==KeyEvent.VK_SPACE) {
@@ -262,9 +268,13 @@ int number = 1;
 		    player.up = false;
 		}
 		if(e.getKeyCode()==KeyEvent.VK_LEFT) {
+			player = new soldier(player.x,player.y,50,50, "Gunner.png");
+			manager.setPlayer(player);
 			player.left=false;
 		}
 		if(e.getKeyCode()==KeyEvent.VK_RIGHT) {
+			player = new soldier(player.x,player.y,50,50, "Gunner.png");
+			manager.setPlayer(player);
 			player.right=false;
 		}
 		if (e.getKeyCode()==KeyEvent.VK_DOWN) {
