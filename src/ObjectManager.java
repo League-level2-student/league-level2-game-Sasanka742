@@ -8,11 +8,13 @@ import java.util.Random;
 
 public class ObjectManager implements ActionListener{
 	soldier player;
-	ArrayList<bullet> bullets = new ArrayList<bullet>(); 
+	ArrayList<bullet> bullets = new ArrayList<bullet>();
 	ArrayList<enemy> enemies = new ArrayList<enemy>();
+	ArrayList<Integer> bulletsReflected = new ArrayList<Integer>();
 	Random random = new Random();
 	int kills;
 	int speedValue;
+	
 	public ObjectManager(soldier soldier) {
 		player = soldier;
 	}
@@ -29,17 +31,22 @@ public class ObjectManager implements ActionListener{
 		bullets.add(b);
 		
 	}
+	
 	void addEnemy() {
 		enemies.add(new enemy(MW3.WIDTH+100,(random.nextInt(MW3.HEIGHT-450+1)+310),50,50,3));
 	}
 	
 	void update(){
 		for(enemy enemy: enemies) {
+			enemy.enemyBullet.enemyUpdate();
 			enemy.update();
 			if(enemy.x<0) {
 				
 				enemy.isActive = false;
 				player.isActive = false;
+			}
+			if(enemy.enemyBullet.x<0) {
+				enemy.enemyBullet.isActive = false;
 			}
 		}
 		
@@ -64,6 +71,7 @@ public class ObjectManager implements ActionListener{
 			bullet.draw(g);
 		}
 		
+		
 	}
 	void drawDead() {
 		player = new soldier(player.x,player.y,50,50, "dead.png");
@@ -79,8 +87,14 @@ public class ObjectManager implements ActionListener{
 			if(player.collisionBox.intersects(enemies.get(i).collisionBox)&&(player.getStringName().equals("defend.png")==false)) {
 				player.isActive = false;
 				enemies.get(i).isActive = false;
+				
+			}
+			if(player.collisionBox.intersects(enemies.get(i).enemyBullet.collisionBox)&&(player.getStringName().equals("defend.png")==false)) {
+				player.isActive = false;
+				enemies.get(i).enemyBullet.isActive = false;
 			}
 		}
+		
 		for(int i=0;i<enemies.size();i++) {
 			for(int k=0;k<bullets.size();k++) {
 				if(bullets.get(k).collisionBox.intersects(enemies.get(i).collisionBox)) {
@@ -89,7 +103,14 @@ public class ObjectManager implements ActionListener{
 					kills++;
 				}
 			}
+			if(player.collisionBox.intersects(enemies.get(i).enemyBullet.collisionBox)&&(player.getStringName().equals("defend.png"))){
+				player.isActive = true;
+				enemies.get(i).enemyBullet.isActive = true;
+				enemies.get(i).enemyBullet.y = 1000;
+			}	
 		}
+		
+		
 	}
 	void purgeObjects() {
 		for(int i=0;i<bullets.size();i++) {

@@ -107,7 +107,7 @@ int number = 1;
 		}
 		g.setFont(titleFont);
 		g.setColor(Color.white);
-		g.drawString("Ghost Warfare 3",550,150);
+		g.drawString("Street Warfare 3",550,150);
 		
 		g.setFont(titleFont);
 		g.setColor(Color.white);
@@ -162,7 +162,7 @@ int number = 1;
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		System.out.println("Action");
+		
 		if(currentState == MENU){
 		    updateMenuState();
 		}else if(currentState == GAME){
@@ -215,6 +215,7 @@ int number = 1;
 		    }else {
 		    	 currentState++;
 			        startGame();
+			        
 		    }
 		}
 		if (e.getKeyCode()==KeyEvent.VK_UP) {
@@ -230,7 +231,8 @@ int number = 1;
 		    System.out.println("CROUCH");
 		    if(player.y<MW3.HEIGHT-player.height) {
 				//System.out.println("DOWN");
-		    	player.fall = true;
+		    	
+				player.fall = true;
 			}   
 		}
 		if(player.y>350) {
@@ -240,22 +242,13 @@ int number = 1;
 		    System.out.println("RIGHT");
 		    if(player.x<=MW3.WIDTH-(player.width)-player.speed) {
 				//System.out.println("RIGHT");		    	
-				player = new soldier(player.x,player.y,50,50, "walk.png");
-				manager.setPlayer(player);
 		    	player.right = true;
 			} 
 		   
 		}if (e.getKeyCode()==KeyEvent.VK_LEFT) {
 		    System.out.println("LEFT");
 		    if(player.x>=player.speed) {
-				player = new soldier(player.x,player.y,50,50, "walk.png");
-				manager.setPlayer(player);
 				player.left = true;
-			}
-		}if (e.getKeyCode()==KeyEvent.VK_SPACE) {
-			System.out.println("Fire!!");
-			if(currentState==GAME) {
-				manager.addBullet(player.getProjectile());
 			}
 		}
 	}
@@ -268,19 +261,21 @@ int number = 1;
 		    player.up = false;
 		}
 		if(e.getKeyCode()==KeyEvent.VK_LEFT) {
-			player = new soldier(player.x,player.y,50,50, "Gunner.png");
-			manager.setPlayer(player);
 			player.left=false;
 		}
 		if(e.getKeyCode()==KeyEvent.VK_RIGHT) {
-			player = new soldier(player.x,player.y,50,50, "Gunner.png");
-			manager.setPlayer(player);
 			player.right=false;
 		}
 		if (e.getKeyCode()==KeyEvent.VK_DOWN) {
 		    System.out.println("JUMP");
 		   // player.fall();
 		    player.fall = false;
+		}
+		if (e.getKeyCode()==KeyEvent.VK_SPACE&&player.getStringName().equals("defend.png")==false) {
+			System.out.println("Fire!!");
+			if(currentState==GAME) {
+				manager.addBullet(player.getProjectile());
+			}
 		}
 	}
 	void loadImage(String imageFile) {
