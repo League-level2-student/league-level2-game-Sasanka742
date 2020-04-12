@@ -17,6 +17,7 @@ int savedScore=0;
 int spawnRate=1000;
 int waveNum = 1;
 int number = 1;
+
 	public static BufferedImage image;
 	public static boolean needImage = true;
 	public static boolean gotImage = false;
@@ -25,9 +26,11 @@ int number = 1;
     final int GAME = 1;
     final int WAVE = 2;
     final int END = 3;
+    final int HOW = 4;
+    
 	Random random = new Random();
 	int currentState = MENU;
-	
+	int stateSave;
 	Font titleFont;
 	
 	Timer frameDraw;
@@ -56,6 +59,8 @@ int number = 1;
 		    drawEndState(g);
 		}else if(currentState == WAVE){
 			drawWaveState(g);
+		}else if(currentState == HOW) {
+			drawInstructionState(g);
 		}
 	}
 	void startGame() {
@@ -95,6 +100,9 @@ int number = 1;
 		
 	}
 	void updateWaveState() {
+		
+	}
+	void updateInstructionState() {
 		
 	}
 	////////////
@@ -158,6 +166,16 @@ int number = 1;
 		}
 
 	}
+	void drawInstructionState(Graphics g) {
+		g.setFont(titleFont);
+		g.setColor(Color.white);
+		g.drawString("Controls: " + waveNum,900,150);
+		g.drawString("UP - Arrow Key UP " + waveNum,900,150);
+		g.drawString("Down - Arrow Key Down " + waveNum,900,150);
+		g.drawString("Forward - Arrow Key Right " + waveNum,900,150);
+		g.drawString("Backward - Arrow Key Left " + waveNum,900,150);
+		g.drawString("To Equip/Unequip Shield - Z " + waveNum,900,150);
+	}
 	////////////
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -171,6 +189,8 @@ int number = 1;
 		    updateEndState();
 		}else if(currentState == WAVE){
 		    updateWaveState();
+		}else if(currentState == HOW) {
+			updateInstructionState();
 		}
 		repaint();
 	}
@@ -182,7 +202,18 @@ int number = 1;
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+		if (e.getKeyCode()==KeyEvent.VK_H) {
+			stateSave = currentState;
+			if(currentState == MENU ||currentState == END ||currentState == WAVE) {
+				stateSave = currentState;
+				currentState = HOW;
+				startGame();
+			}
+			if(currentState == HOW ) {
+				currentState = stateSave;	
+				startGame();
+			}
+		}
 		if (e.getKeyCode()==KeyEvent.VK_Z) {
 			if(player.getStringName().equals("Gunner.png")) {
 				player = new soldier(player.x,player.y,50,50, "defend.png");
@@ -212,8 +243,14 @@ int number = 1;
 				manager.changeEnemySpeed();
 				currentState = GAME;
 				startGame();
-		    }else {
-		    	 currentState++;
+		    }else if(currentState==GAME&&player.isActive==true){
+		    	player = new soldier(100,300,50,50,"Gunner.png");
+		    	savedScore = manager.getScore();
+		    	manager = new ObjectManager(player);
+		    	currentState = MENU;
+		        startGame();
+		    }else {	 
+		    	currentState++;
 			        startGame();
 			        
 		    }
