@@ -26,7 +26,6 @@ int number = 1;
     final int GAME = 1;
     final int WAVE = 2;
     final int END = 3;
-    final int HOW = 4;
     
 	Random random = new Random();
 	int currentState = MENU;
@@ -59,9 +58,8 @@ int number = 1;
 		    drawEndState(g);
 		}else if(currentState == WAVE){
 			drawWaveState(g);
-		}else if(currentState == HOW) {
-			drawInstructionState(g);
 		}
+		
 	}
 	void startGame() {
 		if(manager.getScore()/20==number&&manager.getScore()!=0) {
@@ -102,20 +100,29 @@ int number = 1;
 	void updateWaveState() {
 		
 	}
-	void updateInstructionState() {
-		
-	}
 	////////////
 	void drawMenuState(Graphics g) {
 		if (gotImage) {
 			g.drawImage(image, 0, 0, MW3.WIDTH, MW3.HEIGHT, null);
+			g.setColor(Color.WHITE);
+			g.drawString("Hold X for help", 1275, 15);
+			if(stateSave==4) {
+				g.setColor(Color.white);
+				g.drawString("Controls: ",10,35);
+				g.drawString("UP - Arrow Key UP ",10,50);
+				g.drawString("Down - Arrow Key Down " ,10,65);
+				g.drawString("Forward - Arrow Key Right ",10,80);
+				g.drawString("Backward - Arrow Key Left " ,10,95);
+				g.drawString("To Equip/Unequip Shield - Z ",10,110);
+				
+			}
 		}else {
 		g.setColor(Color.BLUE);
 		g.fillRect(0, 0, MW3.WIDTH, MW3.HEIGHT);
 		}
 		g.setFont(titleFont);
 		g.setColor(Color.white);
-		g.drawString("Street Warfare 3",550,150);
+		g.drawString("Street Warfare 3",525,150);
 		
 		g.setFont(titleFont);
 		g.setColor(Color.white);
@@ -126,6 +133,17 @@ int number = 1;
 			g.drawImage(image, 0, 0, MW3.WIDTH, MW3.HEIGHT, null);
 			g.setColor(Color.WHITE);
 			g.drawString("Score: "+ manager.getScore(), 10, 15);
+			g.drawString("Hold X for help", 1275, 15);
+			if(stateSave==4) {
+				g.setColor(Color.white);
+				g.drawString("Controls: ",10,35);
+				g.drawString("UP - Arrow Key UP ",10,50);
+				g.drawString("Down - Arrow Key Down " ,10,65);
+				g.drawString("Forward - Arrow Key Right ",10,80);
+				g.drawString("Backward - Arrow Key Left " ,10,95);
+				g.drawString("To Equip/Unequip Shield - Z ",10,110);
+				
+			}
 		}else {
 			g.setColor(Color.BLUE);
 			g.fillRect(0, 0, WIDTH, HEIGHT);
@@ -137,6 +155,18 @@ int number = 1;
 	void drawEndState(Graphics g) {
 		if (gotImage) {
 			g.drawImage(image, 0, 0, MW3.WIDTH, MW3.HEIGHT, null);
+			g.setColor(Color.WHITE);
+			g.drawString("Hold X for help", 1275, 15);
+			if(stateSave==4) {
+				g.setColor(Color.white);
+				g.drawString("Controls: ",10,35);
+				g.drawString("UP - Arrow Key UP ",10,50);
+				g.drawString("Down - Arrow Key Down " ,10,65);
+				g.drawString("Forward - Arrow Key Right ",10,80);
+				g.drawString("Backward - Arrow Key Left " ,10,95);
+				g.drawString("To Equip/Unequip Shield - Z ",10,110);
+				
+			}
 		}else {
 		g.setColor(Color.RED);
 		g.fillRect(0, 0, MW3.WIDTH, MW3.HEIGHT);
@@ -163,18 +193,20 @@ int number = 1;
 			g.setFont(titleFont);
 			g.setColor(Color.white);
 			g.drawString("Press Enter for next Wave",325,250);
+			g.setColor(Color.WHITE);
+			g.drawString("Hold X for help", 1275, 15);
+			if(stateSave==4) {
+				g.setColor(Color.white);
+				g.drawString("Controls: ",10,35);
+				g.drawString("UP - Arrow Key UP ",10,50);
+				g.drawString("Down - Arrow Key Down " ,10,65);
+				g.drawString("Forward - Arrow Key Right ",10,80);
+				g.drawString("Backward - Arrow Key Left " ,10,95);
+				g.drawString("To Equip/Unequip Shield - Z ",10,110);
+				
+			}
 		}
 
-	}
-	void drawInstructionState(Graphics g) {
-		g.setFont(titleFont);
-		g.setColor(Color.white);
-		g.drawString("Controls: " + waveNum,900,150);
-		g.drawString("UP - Arrow Key UP " + waveNum,900,150);
-		g.drawString("Down - Arrow Key Down " + waveNum,900,150);
-		g.drawString("Forward - Arrow Key Right " + waveNum,900,150);
-		g.drawString("Backward - Arrow Key Left " + waveNum,900,150);
-		g.drawString("To Equip/Unequip Shield - Z " + waveNum,900,150);
 	}
 	////////////
 	@Override
@@ -189,8 +221,6 @@ int number = 1;
 		    updateEndState();
 		}else if(currentState == WAVE){
 		    updateWaveState();
-		}else if(currentState == HOW) {
-			updateInstructionState();
 		}
 		repaint();
 	}
@@ -202,17 +232,8 @@ int number = 1;
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
-		if (e.getKeyCode()==KeyEvent.VK_H) {
-			stateSave = currentState;
-			if(currentState == MENU ||currentState == END ||currentState == WAVE) {
-				stateSave = currentState;
-				currentState = HOW;
-				startGame();
-			}
-			if(currentState == HOW ) {
-				currentState = stateSave;	
-				startGame();
-			}
+		if (e.getKeyCode()==KeyEvent.VK_X) {
+			stateSave = 4;
 		}
 		if (e.getKeyCode()==KeyEvent.VK_Z) {
 			if(player.getStringName().equals("Gunner.png")) {
@@ -313,6 +334,9 @@ int number = 1;
 			if(currentState==GAME) {
 				manager.addBullet(player.getProjectile());
 			}
+		}
+		if (e.getKeyCode()==KeyEvent.VK_X) {
+				stateSave = 0;	
 		}
 	}
 	void loadImage(String imageFile) {
